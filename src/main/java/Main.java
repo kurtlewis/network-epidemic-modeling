@@ -16,6 +16,11 @@ public class Main {
         if (model.equals("SI")) {
             graph = new SIGraph(inFile, beta);
         }
-        //graph.run(10000);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+        graph.run(2000);
     }
 }

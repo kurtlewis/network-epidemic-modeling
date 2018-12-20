@@ -11,6 +11,17 @@ public class SIGraph extends AbstractEpidemicGraph {
     public SIGraph(String filename, double beta) {
         super(filename);
         this.beta = beta;
+        int rand = rGen.nextInt(susceptible.size());
+        // removing a random element from a hashset is slow
+        int idx = 0;
+        for (Node n : susceptible) {
+            if (idx == rand) {
+                infected.add(n);
+                susceptible.remove(n);
+                break;
+            }
+            idx++;
+        }
     }
 
     @Override
@@ -18,7 +29,7 @@ public class SIGraph extends AbstractEpidemicGraph {
         Set<Node> toBeInfected = new HashSet();
         // iterate through already infected nodes and find new infections
         // add them to the set to be later marked as infected
-        for (Node node : susceptible) {
+        for (Node node : infected) {
             Iterator<Node> neighborsIter = node.getNeighborNodeIterator();
             while (neighborsIter.hasNext()) {
                 Node neighbor = neighborsIter.next();

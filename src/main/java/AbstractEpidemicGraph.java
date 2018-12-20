@@ -92,6 +92,11 @@ public abstract class AbstractEpidemicGraph {
         // code to run the visualization
         for (int idx = 0; idx < iterations; idx++) {
             step();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(e);
+            }
         }
     }
 
