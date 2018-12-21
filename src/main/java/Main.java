@@ -3,7 +3,7 @@ public class Main {
     public static void main(String[] args) {
         if (args.length < 5 || args[0].equals("h")) {
             System.out.println("Usage Instructions:");
-            System.out.println("Java Main <neighbors file> <out file for saved video> <model> <iterations> <beta>");
+            System.out.println("Java Main <neighbors file> <out file for saved video> <model> <iterations> <beta> <mu>");
             System.out.println("Models: 'SI', 'SIS', 'SRS'");
             System.exit(0);
         }
@@ -15,6 +15,9 @@ public class Main {
         AbstractEpidemicGraph graph = null;
         if (model.equals("SI")) {
             graph = new SIGraph(inFile, beta);
+        } else if (model.equals("SIS")) {
+            double mu = Double.parseDouble(args[5]);
+            graph = new SISGraph(inFile, beta, mu);
         }
         try {
             Thread.sleep(2000);
