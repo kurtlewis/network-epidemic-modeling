@@ -22,7 +22,7 @@ public abstract class AbstractEpidemicGraph {
         infected = new HashSet<>();
         immune = new HashSet<>();
         graph = new SingleGraph("Epidemic Model");
-        graph.addAttribute("ui.stylesheet", "node.susceptible { fill-color: black; } "
+        graph.addAttribute("ui.stylesheet", " node { size: 20px; } node.susceptible { fill-color: black; } "
                                     + "node.infected { fill-color: tomato; } node.immune { fill-color: green; } "
                                     + "edge { fill-color: darkgray; }");
         graph.display();
