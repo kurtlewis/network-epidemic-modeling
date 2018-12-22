@@ -10,8 +10,8 @@ public class SIRGraph extends AbstractEpidemicGraph {
     private double mu;
     private Random rGen = new Random();
 
-    public SIRGraph(String filename, double beta, double mu) {
-        super(filename);
+    public SIRGraph(String generator, int numNodes, double beta, double mu) {
+        super(generator, numNodes);
         this.beta = beta;
         this.mu = mu;
         int rand = rGen.nextInt(susceptible.size());

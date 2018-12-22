@@ -1,6 +1,9 @@
 // Graph Stream imports
 import org.graphstream.graph.Node;
+import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.algorithm.generator.Generator;
+import org.graphstream.algorithm.generator.BarabasiAlbertGenerator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,9 +18,9 @@ public abstract class AbstractEpidemicGraph {
     protected Set<Node> susceptible;
     protected Set<Node> infected;
     protected Set<Node> immune;
-    protected SingleGraph graph;
+    protected Graph graph;
 
-    public AbstractEpidemicGraph(String filename) {
+    public AbstractEpidemicGraph(String generator, int numNodes) {
         susceptible = new HashSet<>();
         infected = new HashSet<>();
         immune = new HashSet<>();
@@ -25,9 +28,25 @@ public abstract class AbstractEpidemicGraph {
         graph.addAttribute("ui.stylesheet", " node { size: 20px; } node.susceptible { fill-color: black; } "
                                     + "node.infected { fill-color: tomato; } node.immune { fill-color: green; } "
                                     + "edge { fill-color: darkgray; }");
+        graph.addAttribute("ui.quality");
         graph.display();
-        this.buildGraph(filename);
+        if (generator.equals("BarabasiAlbert")) {
+            generateBarabasiAlbertGraph(numNodes);
+        }
+        // copy nodes to susceptible set
+        for (Node n : graph.getEachNode()) {
+            susceptible.add(n);
+        }
+    }
 
+    private void generateBarabasiAlbertGraph(int numNodes) {
+        Generator gen = new BarabasiAlbertGenerator();
+        gen.addSink(graph);
+        gen.begin();
+        for (int idx = 0; idx < numNodes; idx++) {
+            gen.nextEvents();
+        }
+        gen.end();
     }
 
     /**

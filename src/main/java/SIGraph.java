@@ -8,8 +8,8 @@ import org.graphstream.graph.Node;
 public class SIGraph extends AbstractEpidemicGraph {
     private double beta;
     private Random rGen = new Random();
-    public SIGraph(String filename, double beta) {
-        super(filename);
+    public SIGraph(String generator, int numNodes, double beta) {
+        super(generator, numNodes);
         this.beta = beta;
         int rand = rGen.nextInt(susceptible.size());
         // removing a random element from a hashset is slow
