@@ -18,6 +18,9 @@ public class Main {
         } else if (model.equals("SIS")) {
             double mu = Double.parseDouble(args[5]);
             graph = new SISGraph(inFile, beta, mu);
+        } else if (model.equals("SIR")) {
+            double mu = Double.parseDouble(args[5]);
+            graph = new SIRGraph(inFile, beta, mu);
         }
         try {
             Thread.sleep(2000);
