@@ -4,6 +4,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.algorithm.generator.Generator;
 import org.graphstream.algorithm.generator.BarabasiAlbertGenerator;
+import org.graphstream.algorithm.generator.DorogovtsevMendesGenerator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +33,8 @@ public abstract class AbstractEpidemicGraph {
         graph.display();
         if (generator.equals("BarabasiAlbert")) {
             generateBarabasiAlbertGraph(numNodes);
+        } else if (generator.equals("DorogovtsevMendes")) {
+            generateDorogovtsevMendesGenerator(numNodes);
         }
         // copy nodes to susceptible set
         for (Node n : graph.getEachNode()) {
@@ -41,6 +44,16 @@ public abstract class AbstractEpidemicGraph {
 
     private void generateBarabasiAlbertGraph(int numNodes) {
         Generator gen = new BarabasiAlbertGenerator();
+        gen.addSink(graph);
+        gen.begin();
+        for (int idx = 0; idx < numNodes; idx++) {
+            gen.nextEvents();
+        }
+        gen.end();
+    }
+
+    private void generateDorogovtsevMendesGenerator(int numNodes) {
+        Generator gen = new DorogovtsevMendesGenerator();
         gen.addSink(graph);
         gen.begin();
         for (int idx = 0; idx < numNodes; idx++) {
