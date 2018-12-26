@@ -28,6 +28,7 @@ public class Main {
         } catch (InterruptedException e) {
             System.out.println(e);
         }
-        graph.run(2000);
+        graph.run(iterations, outFile);
+        System.out.println("Complete.");
     }
 }

@@ -5,9 +5,11 @@ import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.algorithm.generator.Generator;
 import org.graphstream.algorithm.generator.BarabasiAlbertGenerator;
 import org.graphstream.algorithm.generator.DorogovtsevMendesGenerator;
+import org.graphstream.stream.file.FileSinkImages;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -119,17 +121,59 @@ public abstract class AbstractEpidemicGraph {
      * Runs and saves the epidemic model
      * @param iterations - the numbr of iterations the epidemic should run for
      */
-    public void run(int iterations) {
-        //graph.display();
-        // code to run the visualization
-        for (int idx = 0; idx < iterations; idx++) {
-            step();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                System.out.println(e);
+    public void run(int iterations, String outputFilePrefix) {
+        //
+        // Prepare to save to images
+        //
+        FileSinkImages.OutputPolicy outputPolicy = FileSinkImages.OutputPolicy.BY_STEP;
+        FileSinkImages.OutputType outputType = FileSinkImages.OutputType.PNG;
+        String extension = ".png";
+        FileSinkImages.Resolution resolution = FileSinkImages.Resolutions.HD720;
+        FileSinkImages fsImages = new FileSinkImages(outputFilePrefix, outputType, resolution, outputPolicy);
+        fsImages.setLayoutPolicy(FileSinkImages.LayoutPolicy.COMPUTED_FULLY_AT_NEW_IMAGE);
+        fsImages.setQuality(FileSinkImages.Quality.HIGH);
+        /**
+         * A note on FileSinkImages and how you're supposed to write images
+         ******************************************************************
+         * There is supposed to be a way for writing images when the graph marks a step. I have everything working,
+         * except the generated images are blank. Due to a lack of documentation and online help, I've decided to write
+         * the code myself using a utility method. I've left the autoimage generation code below commented out in case I
+         * ever figure it out.
+         */
+        //graph.clearSinks();
+        //graph.addSink(fsImages);
+        // kick off recording
+        try {
+            //fsImages.begin(outputFilePrefix);
+            // code to run the visualization
+            for (int idx = 0; idx < iterations; idx++) {
+                graph.stepBegins(idx);
+                step();
+                //
+                // Write the image
+                //
+                // Generate the filename
+                int numZeros = Integer.toString(iterations).length() - Integer.toString(idx).length();
+                StringBuilder filename = new StringBuilder();
+                filename.append(outputFilePrefix);
+                for (int jdx = 0; jdx < numZeros; jdx++) {
+                    filename.append('0');
+                }
+                filename.append(idx);
+                filename.append(extension);
+                // Actually write the image
+                fsImages.writeAll(graph, filename.toString());
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    System.out.println(e);
+                }
             }
+            //fsImages.end();
+        } catch (IOException e) {
+            System.out.println(e);
         }
+
     }
 
     // Implement this for individual steps of the epidemic model
