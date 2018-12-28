@@ -139,11 +139,16 @@ public abstract class AbstractEpidemicGraph {
          * except the generated images are blank. Due to a lack of documentation and online help, I've decided to write
          * the code myself using a utility method. I've left the autoimage generation code below commented out in case I
          * ever figure it out.
+         *
+         * On top of that, FileSinkImages has the functionality to write individual screenshots, and that doesn't work
+         * because there is no way to reuse a previously generated layout - it is always calculated at the time of a new image
+         * So, i used the backdoor of using the "ui.screenshot" attribute on graphs. I commented out the try/except code below
+         * but am also leaving it, in case I come back to do this the right way, if I ever figure out how that is.
          */
         //graph.clearSinks();
         //graph.addSink(fsImages);
         // kick off recording
-        try {
+        //try {
             //fsImages.begin(outputFilePrefix);
             // code to run the visualization
             for (int idx = 0; idx < iterations; idx++) {
@@ -162,7 +167,8 @@ public abstract class AbstractEpidemicGraph {
                 filename.append(idx);
                 filename.append(extension);
                 // Actually write the image
-                fsImages.writeAll(graph, filename.toString());
+                //fsImages.writeAll(graph, filename.toString());
+                graph.addAttribute("ui.screenshot", filename.toString());
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -170,9 +176,9 @@ public abstract class AbstractEpidemicGraph {
                 }
             }
             //fsImages.end();
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        //} catch (IOException e) {
+            //System.out.println(e);
+        //}
 
     }
 
