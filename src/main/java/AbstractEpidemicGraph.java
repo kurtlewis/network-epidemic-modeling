@@ -25,6 +25,7 @@ public abstract class AbstractEpidemicGraph {
     protected Graph graph;
 
     public AbstractEpidemicGraph(String generator, int numNodes) {
+        // initialize objects
         susceptible = new HashSet<>();
         infected = new HashSet<>();
         immune = new HashSet<>();
@@ -34,51 +35,36 @@ public abstract class AbstractEpidemicGraph {
                                     + "edge { fill-color: darkgray; }");
         graph.addAttribute("ui.quality");
         graph.display();
+
+        //
+        // Graph generation
+        //
+        Generator gen = null;
+        // choose the generator
         if (generator.equals("BarabasiAlbert")) {
-            generateBarabasiAlbertGraph(numNodes);
+            gen = new BarabasiAlbertGenerator();
         } else if (generator.equals("DorogovtsevMendes")) {
-            generateDorogovtsevMendesGenerator(numNodes);
+            gen = new DorogovtsevMendesGenerator();
         } else if (generator.equals("Random")) {
-            generateRandomGraph(numNodes);
+            gen = new RandomGenerator();
         }
+        // generate the graph
+        gen.addSink(graph);
+        gen.begin();
+        for (int idx = 0; idx < numNodes; idx++) {
+            gen.nextEvents();
+        }
+        gen.end();
+
         // copy nodes to susceptible set
         for (Node n : graph.getEachNode()) {
             susceptible.add(n);
         }
     }
 
-    private void generateBarabasiAlbertGraph(int numNodes) {
-        Generator gen = new BarabasiAlbertGenerator();
-        gen.addSink(graph);
-        gen.begin();
-        for (int idx = 0; idx < numNodes; idx++) {
-            gen.nextEvents();
-        }
-        gen.end();
-    }
-
-    private void generateDorogovtsevMendesGenerator(int numNodes) {
-        Generator gen = new DorogovtsevMendesGenerator();
-        gen.addSink(graph);
-        gen.begin();
-        for (int idx = 0; idx < numNodes; idx++) {
-            gen.nextEvents();
-        }
-        gen.end();
-    }
-
-    private void generateRandomGraph(int numNodes) {
-        Generator gen = new RandomGenerator();
-        gen.addSink(graph);
-        gen.begin();
-        for (int idx = 0; idx < numNodes; idx++) {
-            gen.nextEvents();
-        }
-        gen.end();
-    }
-
     /**
      * Takes a neighbors file and builds it into a graph
+     * Deprecated
      * Reminder: neighbors file has a line for every node in the graph, and the first node on a line has an edge to every other node on that line
      * @param filename - neighbors file to read
      */
