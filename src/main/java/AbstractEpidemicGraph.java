@@ -6,6 +6,8 @@ import org.graphstream.algorithm.generator.Generator;
 import org.graphstream.algorithm.generator.BarabasiAlbertGenerator;
 import org.graphstream.algorithm.generator.DorogovtsevMendesGenerator;
 import org.graphstream.algorithm.generator.RandomGenerator;
+import org.graphstream.algorithm.generator.FullGenerator;
+import org.graphstream.algorithm.generator.GridGenerator;
 import org.graphstream.stream.file.FileSinkImages;
 
 import java.io.File;
@@ -45,6 +47,10 @@ public abstract class AbstractEpidemicGraph {
             gen = new BarabasiAlbertGenerator();
         } else if (generator.equals("DorogovtsevMendes")) {
             gen = new DorogovtsevMendesGenerator();
+        } else if (generator.equals("FullyConnected")) {
+            gen = new FullGenerator();
+        } else if (generator.equals("Grid")) {
+            gen = new GridGenerator();
         } else if (generator.equals("Random")) {
             gen = new RandomGenerator();
         }
