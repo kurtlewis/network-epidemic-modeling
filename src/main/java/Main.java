@@ -5,6 +5,7 @@ public class Main {
             System.out.println("Usage Instructions:");
             System.out.println("Java Main <out file for saved video> <model> <generator> <numNodes> <iterations> <beta> <mu>");
             System.out.println("Models: 'SI', 'SIS', 'SRS'");
+            System.out.println("Generators: 'Random' 'FullyConnected' 'Grid' 'BarabasiAlbert' 'DorogovtsevMendes'");
             System.exit(0);
         }
         String outFile = args[0];
